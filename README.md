@@ -1,6 +1,6 @@
 # css-fluid README
 
-Help with css fluid.
+A Visual Studio Code extension to facilitate easier calculating of some css fluid related values.
 
 ## Features
 
