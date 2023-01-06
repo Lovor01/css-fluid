@@ -19,6 +19,10 @@
         "title": "Fluid: Desktop Percent"
       },
       {
+        "command": "css-fluid.desktopContentPercentage",
+        "title": "Fluid: Desktop Percent of content"
+      },
+      {
         "command": "css-fluid.mobilePercentage",
         "title": "Fluid: Mobile Percent"
       },

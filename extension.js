@@ -62,7 +62,14 @@ function activate(context) {
 		}
 
 		function sizePercentage(selectionText, environment) {
-			return (parseInt(selectionText) / (environment === 'desktop' ? 1920 : 414) * 100).toFixed(3) + '%';
+			const sizeMap = new Map(
+				[
+					['desktop', 1920],
+					['desktop-content', 1400],
+					['mobile', 414]
+				]
+			);
+			return (parseInt(selectionText) / sizeMap.get(environment) * 100).toFixed(3) + '%';
 		}
 
 
@@ -83,6 +90,9 @@ function activate(context) {
 	// The commandId parameter must match the command field in package.json
 	let disposable = vscode.commands.registerCommand('css-fluid.desktopPercentage', () => {
 		calculateAndReplace('percent', 'desktop')
+	});
+	let disposable = vscode.commands.registerCommand('css-fluid.desktopContentPercentage', () => {
+		calculateAndReplace('percent', 'desktop-content')
 	});
 	let disposable1 = vscode.commands.registerCommand('css-fluid.mobilePercentage', () => {
 		calculateAndReplace('percent', 'mobile')
