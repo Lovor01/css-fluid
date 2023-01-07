@@ -2,6 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 
+let divisor;
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 
@@ -66,7 +68,8 @@ function activate(context) {
 				[
 					['desktop', 1920],
 					['desktop-content', 1400],
-					['mobile', 414]
+					['mobile', 414],
+					['divisor', divisor]
 				]
 			);
 			return (parseInt(selectionText) / sizeMap.get(environment) * 100).toFixed(3) + '%';
@@ -91,14 +94,23 @@ function activate(context) {
 	let disposable = vscode.commands.registerCommand('css-fluid.desktopPercentage', () => {
 		calculateAndReplace('percent', 'desktop')
 	});
-	let disposable = vscode.commands.registerCommand('css-fluid.desktopContentPercentage', () => {
+	let disposable1 = vscode.commands.registerCommand('css-fluid.desktopContentPercentage', () => {
 		calculateAndReplace('percent', 'desktop-content')
 	});
-	let disposable1 = vscode.commands.registerCommand('css-fluid.mobilePercentage', () => {
+	let disposable2 = vscode.commands.registerCommand('css-fluid.mobilePercentage', () => {
 		calculateAndReplace('percent', 'mobile')
 	});
-	let disposable2 = vscode.commands.registerCommand('css-fluid.fluidFont', () => {
+	let disposable3 = vscode.commands.registerCommand('css-fluid.fluidFont', () => {
 		calculateAndReplace('font')
+	});
+	let disposable4 = vscode.commands.registerCommand('css-fluid.setDivisor', async function() {
+		divisor = await vscode.window.showInputBox({
+			prompt: 'Set divisor',
+			value: ''
+		});
+	});
+	let disposable5 = vscode.commands.registerCommand('css-fluid.percentageByDivisor', () => {
+		calculateAndReplace('percent', 'divisor')
 	});
 
 	context.subscriptions.push(disposable, disposable1, disposable2);

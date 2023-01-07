@@ -29,6 +29,14 @@
       {
         "command": "css-fluid.fluidFont",
         "title": "Fluid: Font size"
+      },
+      {
+        "command": "css-fluid.setDivisor",
+        "title": "Fluid: Set Divisor"
+      },
+      {
+        "command": "css-fluid.percentageByDivisor",
+        "title": "Fluid: Percentage by divisor"
       }
     ]
   },
