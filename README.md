@@ -4,6 +4,12 @@ A Visual Studio Code extension to facilitate easier calculating of some css flui
 
 ## Features
 
+### Division by divisor:
+
+First set number `Fluid: set divisor`.
+
+Then type number and choose `Fluid: divide by divisor`
+
 Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
 
 For example if there is an image subfolder under your extension project workspace:
