@@ -3,7 +3,12 @@
 	"publisher": "makeiteasy",
 	"displayName": "CSS fluid",
 	"description": "Fluid css helper routines",
-	"version": "0.0.1",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Lovor01/css-fluid"
+		},
+	"license": "MIT",
+	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.74.0"
 	},
