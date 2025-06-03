@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-const vscode = require('vscode');
+const vscode = require( 'vscode' );
 
 let divisor;
 
@@ -10,12 +10,12 @@ let divisor;
 /**
  * @param {vscode.ExtensionContext} context
  */
-function activate(context) {
+function activate ( context ) {
 	/**
 	 * Calculates percentage
 	 * @param {string} environment
 	 */
-	function calculateAndReplace(
+	function calculateAndReplace (
 		type = 'font',
 		environment = 'desktop',
 		askForSizes = false,
@@ -24,57 +24,54 @@ function activate(context) {
 		 * Async function because showInputBox is async
 		 * @returns
 		 */
-		async function fontProcedure() {
-			function fluidFont(selectionText) {
+		async function fontProcedure () {
+			function fluidFont ( selectionText ) {
 				// const factor = ((selectionText - min_font_size) / 1506 * 100).toFixed(4); for desktop 1920 and mobile 414
 				const factor = (
-					(selectionText - min_font_size) /
-					(desktop_size - mobile_size)
-				).toFixed(4);
-				const mobileInRem = (mobile_size / 16).toFixed(4);
+					( selectionText - min_font_size ) /
+					( desktop_size - mobile_size )
+				).toFixed( 4 );
+				const mobileInRem = ( mobile_size / 16 ).toFixed( 4 );
 				// return `calc(${min_font_size_in_REM} + (${selectionText} - {min_font_size}) * ((100vw - min_viewport_including_unit) / (max_viewport - min_viewport)))` - formula!
 				// return `clamp(${min_font_size / 16}rem, calc(${min_font_size_in_REM} + ${factor} * (1vw - 0.25875rem)), ${selectionText / 16}rem)`; for desktop 1920 and mobile 414
-				return `clamp(${
-					min_font_size / 16
-				}rem, calc(${min_font_size_in_REM} + ${factor} * (100vw - ${mobileInRem}rem)), ${
-					selectionText / 16
-				}rem)`;
+				return `clamp(${min_font_size / 16
+					}rem, calc(${min_font_size_in_REM} + ${factor} * (100vw - ${mobileInRem}rem)), ${selectionText / 16
+					}rem)`;
 			}
 
-			async function pickSource(prompt, property) {
+			async function pickSource ( prompt, property ) {
 				return askForSizes
-					? await vscode.window.showInputBox({
-							prompt: 'Desktop width',
-							value: configuration[property],
-					  })
-					: configuration[property];
+					? await vscode.window.showInputBox( {
+						prompt,
+						value: configuration[ property ],
+					} )
+					: configuration[ property ];
 			}
 
-			const desktop_size = await pickSource('Desktop width', 'desktopWidth');
-			console.log('desktopsize: ', desktop_size);
-			const mobile_size = await pickSource('Mobile width', 'mobileWidth');
-			const min_font_size = await pickSource('Minimum value', 'minValue');
-			if (!min_font_size) return;
+			const desktop_size = await pickSource( 'Desktop width', 'desktopWidth' );
+			const mobile_size = await pickSource( 'Mobile width', 'mobileWidth' );
+			const min_font_size = await pickSource( 'Minimum value', 'minValue' );
+			if ( !min_font_size ) return;
 			const min_font_size_in_REM = min_font_size
-				? parseInt(min_font_size) / 16 + 'rem'
+				? parseInt( min_font_size ) / 16 + 'rem'
 				: '1.125rem';
-			replaceWithCalculated(fluidFont);
+			replaceWithCalculated( fluidFont );
 		}
 
-		function fontInRem() {
-			replaceWithCalculated(selectionText => selectionText / 16 + 'rem');
+		function fontInRem () {
+			replaceWithCalculated( selectionText => selectionText / 16 + 'rem' );
 		}
 
-		function replaceWithCalculated(calculateCallback) {
-			if (editor)
+		function replaceWithCalculated ( calculateCallback ) {
+			if ( editor )
 				editor
-					.edit(function (editBuilder) {
+					.edit( function ( editBuilder ) {
 						// const selection = editor.document.getWordRangeAtPosition(editor.selection.active.translate(0, -1));
 						const selection = editor.document.getWordRangeAtPosition(
 							editor.selection.active,
 						);
-						const selectionText = editor.document.getText(selection);
-						if (!selection || isNaN(Number(selectionText))) {
+						const selectionText = editor.document.getText( selection );
+						if ( !selection || isNaN( Number( selectionText ) ) ) {
 							vscode.window.showErrorMessage(
 								'Text before cursor is not a number!',
 							);
@@ -82,39 +79,39 @@ function activate(context) {
 						}
 						editBuilder.replace(
 							selection,
-							calculateCallback(selectionText, environment),
+							calculateCallback( selectionText, environment ),
 						);
-					})
-					.then(() => {
+					} )
+					.then( () => {
 						const lastPosition = editor.selection.end;
 						editor.selection = new vscode.Selection(
 							lastPosition,
 							lastPosition,
 						);
-					});
+					} );
 		}
 
-		function sizePercentage(selectionText, environment) {
-			const sizeMap = new Map([
-				['desktop', configuration.desktopWidth],
-				['desktop-content', configuration.desktopContent],
-				['mobile', configuration.mobileWidth],
-				['divisor', divisor],
-			]);
+		function sizePercentage ( selectionText, environment ) {
+			const sizeMap = new Map( [
+				[ 'desktop', configuration.desktopWidth ],
+				[ 'desktop-content', configuration.desktopContent ],
+				[ 'mobile', configuration.mobileWidth ],
+				[ 'divisor', divisor ],
+			] );
 			return (
 				(
-					(parseInt(selectionText) / sizeMap.get(environment)) *
+					( parseInt( selectionText ) / sizeMap.get( environment ) ) *
 					100
-				).toFixed(3) + '%'
+				).toFixed( 3 ) + '%'
 			);
 		}
 
-		const configuration = vscode.workspace.getConfiguration('css-fluid');
+		const configuration = vscode.workspace.getConfiguration( 'css-fluid' );
 		const editor = vscode.window.activeTextEditor;
-		if (type === 'font')
-			if (environment === 'rem') fontInRem();
+		if ( type === 'font' )
+			if ( environment === 'rem' ) fontInRem();
 			else fontProcedure();
-		else replaceWithCalculated(sizePercentage);
+		else replaceWithCalculated( sizePercentage );
 	}
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
@@ -127,59 +124,59 @@ function activate(context) {
 	let disposable = vscode.commands.registerCommand(
 		'css-fluid.desktopPercentage',
 		() => {
-			calculateAndReplace('percent', 'desktop');
+			calculateAndReplace( 'percent', 'desktop' );
 		},
 	);
 	let disposable1 = vscode.commands.registerCommand(
 		'css-fluid.desktopContentPercentage',
 		() => {
-			calculateAndReplace('percent', 'desktop-content');
+			calculateAndReplace( 'percent', 'desktop-content' );
 		},
 	);
 	let disposable2 = vscode.commands.registerCommand(
 		'css-fluid.mobilePercentage',
 		() => {
-			calculateAndReplace('percent', 'mobile');
+			calculateAndReplace( 'percent', 'mobile' );
 		},
 	);
 	let disposable3 = vscode.commands.registerCommand(
 		'css-fluid.fluidFontDoNotAsk',
 		() => {
-			calculateAndReplace('font', undefined, false);
+			calculateAndReplace( 'font', undefined, false );
 		},
 	);
 	let disposable4 = vscode.commands.registerCommand(
 		'css-fluid.fluidFontAsk',
 		() => {
-			calculateAndReplace('font', undefined, true);
+			calculateAndReplace( 'font', undefined, true );
 		},
 	);
 	let disposable5 = vscode.commands.registerCommand(
 		'css-fluid.setDivisor',
 		async function () {
-			divisor = await vscode.window.showInputBox({
+			divisor = await vscode.window.showInputBox( {
 				prompt: 'Set divisor',
 				value: '',
-			});
+			} );
 		},
 	);
 	let disposable6 = vscode.commands.registerCommand(
 		'css-fluid.percentageByDivisor',
 		() => {
-			calculateAndReplace('percent', 'divisor');
+			calculateAndReplace( 'percent', 'divisor' );
 		},
 	);
 	let disposable7 = vscode.commands.registerCommand(
 		'css-fluid.fontFromPixelToRem',
 		() => {
-			calculateAndReplace('font', 'rem');
+			calculateAndReplace( 'font', 'rem' );
 		},
 	);
 
 	vscode.commands.executeCommand(
 		'setContext',
 		'css-fluid.supportedLanguages',
-		['css', 'scss', 'sass', 'html', 'json'],
+		[ 'css', 'scss', 'sass', 'html', 'json' ],
 	);
 
 	context.subscriptions.push(
@@ -195,7 +192,7 @@ function activate(context) {
 }
 
 // This method is called when your extension is deactivated
-function deactivate() {}
+function deactivate () {}
 
 module.exports = {
 	activate,
