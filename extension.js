@@ -20,27 +20,33 @@ function activate ( context ) {
 		environment = 'desktop',
 		askForSizes = false,
 	) {
+		// for font interpolation if given in rem
+		let isRem = false;
 		/**
 		 * Async function because showInputBox is async
 		 * @returns
 		 */
 		async function fontProcedure () {
-			function fluidFont ( selectionText ) {
-				// const factor = ((selectionText - min_font_size) / 1506 * 100).toFixed(4); for desktop 1920 and mobile 414
+			function fluidFont ( selectionText, environment, isRem = false ) {
+				min_font_size = parseFloat( min_font_size ) * (isRem ? 16 : 1);
+				// factor is calculated from values in px
 				const factor = (
 					( selectionText - min_font_size ) /
 					( desktop_size - mobile_size )
-				).toFixed( 4 );
-				const mobileInRem = ( mobile_size / 16 ).toFixed( 4 );
+				);
+				const mobileInRem = ( mobile_size / 16 );
+				const min_font_size_in_REM = min_font_size
+				? min_font_size / 16 + 'rem'
+				: '1.125rem';
+				const max_font_size_in_REM = selectionText / 16;
 				// return `calc(${min_font_size_in_REM} + (${selectionText} - {min_font_size}) * ((100vw - min_viewport_including_unit) / (max_viewport - min_viewport)))` - formula!
 				// return `clamp(${min_font_size / 16}rem, calc(${min_font_size_in_REM} + ${factor} * (1vw - 0.25875rem)), ${selectionText / 16}rem)`; for desktop 1920 and mobile 414
 				return `clamp(${min_font_size / 16
-					}rem, calc(${min_font_size_in_REM} + ${factor} * (100vw - ${mobileInRem}rem)), ${selectionText / 16
-					}rem)`;
+					}rem, calc(${min_font_size_in_REM} + ${(factor * 100).toFixed(4)}vw - ${(factor * mobileInRem).toFixed(4)}rem), ${max_font_size_in_REM}rem)`;
 			}
 
 			async function pickSource ( prompt, property ) {
-				return askForSizes
+				return (askForSizes || property === 'minValue')
 					? await vscode.window.showInputBox( {
 						prompt,
 						value: configuration[ property ],
@@ -48,13 +54,12 @@ function activate ( context ) {
 					: configuration[ property ];
 			}
 
+
 			const desktop_size = await pickSource( 'Desktop width', 'desktopWidth' );
 			const mobile_size = await pickSource( 'Mobile width', 'mobileWidth' );
-			const min_font_size = await pickSource( 'Minimum value', 'minValue' );
+			let min_font_size = await pickSource( 'Minimum value', 'minValue' );
 			if ( !min_font_size ) return;
-			const min_font_size_in_REM = min_font_size
-				? parseInt( min_font_size ) / 16 + 'rem'
-				: '1.125rem';
+
 			replaceWithCalculated( fluidFont );
 		}
 
@@ -63,6 +68,7 @@ function activate ( context ) {
 		}
 
 		function replaceWithCalculated ( calculateCallback ) {
+
 			if ( editor )
 				editor
 					.edit( function ( editBuilder ) {
@@ -70,8 +76,19 @@ function activate ( context ) {
 						const selection = editor.document.getWordRangeAtPosition(
 							editor.selection.active,
 						);
-						const selectionText = editor.document.getText( selection );
-						if ( !selection || isNaN( Number( selectionText ) ) ) {
+						let selectionText = editor.document.getText( selection );
+
+						if ( selectionText.endsWith( 'rem' ) ) {
+							isRem = true;
+							selectionText = selectionText.slice( 0, -3 );
+						}
+
+						// Remove px if last two characters
+						const sanitizedSelectionText = (selectionText.endsWith( 'px' )
+							? selectionText.slice( 0, -2 )
+							: selectionText);
+
+						if ( !selection || isNaN( Number( sanitizedSelectionText ) ) ) {
 							vscode.window.showErrorMessage(
 								'Text before cursor is not a number!',
 							);
@@ -79,7 +96,7 @@ function activate ( context ) {
 						}
 						editBuilder.replace(
 							selection,
-							calculateCallback( selectionText, environment ),
+							calculateCallback( sanitizedSelectionText * (isRem ? 16 : 1), environment, isRem ),
 						);
 					} )
 					.then( () => {

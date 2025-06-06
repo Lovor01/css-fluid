@@ -1,3 +1,3 @@
-Copy-Item "C:\Wamp.NET\sites\vscode extension\css-fluid\extension.js" -Destination "C:\Users\Lovro\.vscode\extensions\makeiteasy.css-fluid-0.0.1"
-Copy-Item "C:\Wamp.NET\sites\vscode extension\css-fluid\package.json" -Destination "C:\Users\Lovro\.vscode\extensions\makeiteasy.css-fluid-0.0.1"
+Copy-Item "C:\Wamp.NET\sites\vscode extension\css-fluid\extension.js" -Destination "C:\Users\Lovro\.vscode\extensions\makeiteasy.css-fluid-0.0.3"
+Copy-Item "C:\Wamp.NET\sites\vscode extension\css-fluid\package.json" -Destination "C:\Users\Lovro\.vscode\extensions\makeiteasy.css-fluid-0.0.3"
 # Copy-Item "C:\Wamp.NET\sites\vscode extension\css-fluid\images\icon.png" -Destination "C:\Users\Lovro\.vscode\extensions\makeiteasy.css-fluid-0.0.1\images\icon.png"
