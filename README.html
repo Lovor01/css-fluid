@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>css-fluid README</title>
-        <style>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>css-fluid README</title>
+            <style>
 /* From extension vscode.github */
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
@@ -11,12 +11,14 @@
  *--------------------------------------------------------------------------------------------*/
 
 .vscode-dark img[src$=\#gh-light-mode-only],
-.vscode-light img[src$=\#gh-dark-mode-only] {
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
 	display: none;
 }
 
 </style>
-        
+            
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
 <style>
@@ -37,15 +39,118 @@
     pointer-events: none;
 }
 </style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
         
-    </head>
-    <body class="vscode-body vscode-light">
-        <h1 id="css-fluid-readme">css-fluid README</h1>
+        </head>
+        <body class="vscode-body vscode-dark">
+            <h1 id="css-fluid-readme">css-fluid README</h1>
 <p>A Visual Studio Code extension to facilitate easier calculating of some css fluid related values.</p>
 <h2 id="features">Features</h2>
-<h3 id="division-by-divisor">Division by divisor:</h3>
+<h3 id="fluid-size">Fluid size</h3>
+<p><code>Fluid size</code>, and it's variant <code>Fluid size, ask for dimensions</code> creates formula for interpolating size based on screen width. It can be used to fluidly resize fonts, margins, paddings, etc.</p>
+<p>When using <code>Fluid size</code>, first set settings of the plugin (desktop screen width and mobile screen width) and then type number with or without px as suffix. Position cursor at the end of the size and invoke command. You will be asked for mobile size. Formula will be automattically created.</p>
+<p>In case of <code>Fluid size, ask for dimensions</code>, it will ask first for all settings, including desktop and mobile screen width.</p>
+<h3 id="desktop-percent-mobile-percent-desktop-percent-of-content">Desktop Percent, Mobile percent, Desktop percent of content</h3>
+<p>Invoke on last position of number, it calculates percentage of respective size.</p>
+<h3 id="division-by-divisor">Division by divisor</h3>
 <p>First set number <code>Fluid: set divisor</code>.</p>
 <p>Then type number and choose <code>Fluid: divide by divisor</code></p>
+<p>... to be written further, following text is just placeholder</p>
 <p>Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.</p>
 <p>For example if there is an image subfolder under your extension project workspace:</p>
 <p>![feature X](images/feature-x.png)</p>
@@ -87,7 +192,7 @@
 </ul>
 <p><strong>Enjoy!</strong></p>
 
-        
-        
-    </body>
-    </html>
+            
+            
+        </body>
+        </html>

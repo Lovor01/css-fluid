@@ -8,9 +8,9 @@ A Visual Studio Code extension to facilitate easier calculating of some css flui
 
 `Fluid size`, and it's variant `Fluid size, ask for dimensions` creates formula for interpolating size based on screen width. It can be used to fluidly resize fonts, margins, paddings, etc.
 
-When using `Fluid size`, first set settings of the plugin and then type number with or without px as suffix. Position cursor at the end of the size and invoke command. Formula will be automattically created.
+When using `Fluid size`, first set settings of the plugin (desktop screen width and mobile screen width) and then type number with or without px as suffix. Position cursor at the end of the size and invoke command. You will be asked for mobile size. Formula will be automattically created.
 
-In case of `Fluid size, ask for dimensions`, it will ask first for settings.
+In case of `Fluid size, ask for dimensions`, it will ask first for all settings, including desktop and mobile screen width.
 
 ### Desktop Percent, Mobile percent, Desktop percent of content
 
